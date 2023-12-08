@@ -71,18 +71,22 @@ export function generateClassificationTexture(classification: IClassification): 
       const i = x + width * y;
 
       let color;
+      let visible = true;
       if (classification[x]) {
-        color = classification[x];
+        color = classification[x].color;
+        visible = classification[x].visible;
       } else if (classification[x % 32]) {
-        color = classification[x % 32];
+        color = classification[x % 32].color;
+        visible = classification[x % 32].visible;
       } else {
-        color = classification.DEFAULT;
+        color = classification.DEFAULT.color;
+        visible = classification.DEFAULT.visible;
       }
 
       data[4 * i + 0] = 255 * color.x;
       data[4 * i + 1] = 255 * color.y;
       data[4 * i + 2] = 255 * color.z;
-      data[4 * i + 3] = 255 * color.w;
+      data[4 * i + 3] = visible ? 255 * color.w : 0;
     }
   }
 

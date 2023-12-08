@@ -3,8 +3,14 @@ import { Color, IUniform as IThreeUniform, Vector4 } from 'three';
 export type IGradient = [number, Color][];
 
 export interface IClassification {
-  [value: string]: Vector4;
-  DEFAULT: Vector4;
+  [value: string]: {
+    visible: boolean;
+    color: Vector4;
+  };
+  DEFAULT: {
+    visible: boolean;
+    color: Vector4;
+  };
 }
 
 export interface IUniform<T> extends IThreeUniform {

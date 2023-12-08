@@ -526,24 +526,20 @@ export class PointCloudMaterial extends RawShaderMaterial {
   }
 
   set classification(value: IClassification) {
-    const copy: IClassification = {} as any;
-    for (const key of Object.keys(value)) {
-      copy[key] = value[key].clone();
-    }
+    const copy = { ...value };
 
+    // check if copy is equal to current classification
     let isEqual = false;
-    if (this._classification === undefined) {
-      isEqual = false;
-    } else {
-      isEqual = Object.keys(copy).length === Object.keys(this._classification).length;
 
+    if (this._classification) {
+      isEqual = Object.keys(copy).length === Object.keys(this._classification).length;
       for (const key of Object.keys(copy)) {
-        isEqual = isEqual && this._classification[key] !== undefined;
-        isEqual = isEqual && copy[key].equals(this._classification[key]);
+        isEqual = isEqual && this._classification[key] === copy[key];
       }
     }
 
     if (!isEqual) {
+      console.log('classification is not equal');
       this._classification = copy;
       this.recomputeClassification();
     }
@@ -625,7 +621,6 @@ export class PointCloudMaterial extends RawShaderMaterial {
       this.updateVisibilityTextureData(visibleNodes);
     }
   }
-
 
   private updateVisibilityTextureData(nodes: PointCloudOctreeNode[]) {
     nodes.sort(byLevelAndIndex);
